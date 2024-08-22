@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/estudiantes")
@@ -19,10 +20,12 @@ public class EstudianteController {
         userService.crearUser(user, rolId, cursoId);
     }
     @GetMapping()
-    public List<User> mostrarTodos(){
-
-       return userService.mostrarTodos();
+    public List<User> mostrarEstudiantes(){
+       return userService.mostrarTodos().stream()
+               .filter(user -> user.getRol().getNombre().equals("Estudiante"))
+               .collect(Collectors.toList());
     }
+
 
     @GetMapping("/{id}")
     public Optional<User> estudianteId(@PathVariable Long id){
