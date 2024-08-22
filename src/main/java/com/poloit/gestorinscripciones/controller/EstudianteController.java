@@ -1,8 +1,7 @@
 package com.poloit.gestorinscripciones.controller;
 
-import com.poloit.gestorinscripciones.model.Curso;
-import com.poloit.gestorinscripciones.model.Estudiante;
-import com.poloit.gestorinscripciones.service.EstudianteService;
+import com.poloit.gestorinscripciones.model.User;
+import com.poloit.gestorinscripciones.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,26 +12,31 @@ import java.util.Optional;
 @RequestMapping("/api/estudiantes")
 public class EstudianteController {
     @Autowired
-    EstudianteService estudianteService;
+    UserService userService;
 
    @PostMapping()
-    public void crearEstudiante(@RequestBody Estudiante estudiante, @RequestParam Long cursoId){
-        estudianteService.crearEstudiante(estudiante, cursoId);
+    public void crearEstudiante(@RequestBody User user, @RequestParam Long rolId, @RequestParam Long cursoId){
+        userService.crearUser(user, rolId, cursoId);
     }
     @GetMapping()
-    public List<Estudiante> mostrarTodos(){
-        return estudianteService.mostrarTodos();
+    public List<User> mostrarTodos(){
+
+       return userService.mostrarTodos();
     }
+
     @GetMapping("/{id}")
-    public Optional<Estudiante> estudianteId(@PathVariable Long id){
-        return estudianteService.estudianteId(id);
+    public Optional<User> estudianteId(@PathVariable Long id){
+
+       return userService.userId(id);
     }
+
     @DeleteMapping("/{id}")
     public void eliminarEstudiante(@PathVariable Long id){
-        estudianteService.eliminarEstudiante(id);
+        userService.eliminarUser(id);
     }
+
     @PutMapping("/{id}")
-    public Estudiante actualizarEstudiante(@PathVariable Long id, @RequestBody Estudiante estudiante){
-        return estudianteService.actualizarEstudiante(id, estudiante);
+    public User actualizarEstudiante(@PathVariable Long id, @RequestBody User user){
+        return userService.actualizarUser(id, user);
     }
 }

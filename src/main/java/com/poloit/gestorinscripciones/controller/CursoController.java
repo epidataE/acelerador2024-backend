@@ -15,8 +15,8 @@ public class CursoController {
     CursoService cursoService;
 
     @PostMapping()
-    public void crearCurso(@RequestBody Curso curso){
-        cursoService.crearCurso(curso);
+    public void crearCurso(@RequestBody Curso curso, @RequestParam Long programaId){
+        cursoService.crearCurso(curso, programaId);
 
     }
     @GetMapping()

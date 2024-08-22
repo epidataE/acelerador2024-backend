@@ -1,8 +1,6 @@
 package com.poloit.gestorinscripciones.controller;
 
-import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.Empresa;
-import com.poloit.gestorinscripciones.model.Estudiante;
 import com.poloit.gestorinscripciones.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

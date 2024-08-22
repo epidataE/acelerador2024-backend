@@ -17,6 +17,7 @@ public class EmpresaService {
    public void crearEmpresa(Empresa empresa){
         empresaRepository.save(empresa);
    }
+
    public List<Empresa> mostrarEmpresas(){
         return empresaRepository.findAll();
     }
