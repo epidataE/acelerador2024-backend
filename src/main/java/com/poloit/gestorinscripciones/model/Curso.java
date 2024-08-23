@@ -1,16 +1,37 @@
 package com.poloit.gestorinscripciones.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import java.util.Date;
-
+import jakarta.persistence.*;
 
 
 @Entity
 public class Curso {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    private Long id;
+    private String nombre;
+    private String descripcion;
+    private String fecha_inicio;
+    private String  fecha_fin;
+    //private Long programa_id;
+    @ManyToOne
+    @JoinColumn(name = "programa_id")
+    private Programa programa;
+
+    // Constructor por defecto
+    public Curso() {
+    }
+
+   public Curso(String nombre, String descripcion, String fecha_inicio, String fecha_fin){
+       this.nombre = nombre;
+       this.descripcion = descripcion;
+       this.fecha_inicio=fecha_inicio;
+       this.fecha_fin = fecha_fin;
+       //this.programa_id = programa_id;
+
+   }
+
+   //getters-setters
     public Long getId() {
         return id;
     }
@@ -25,6 +46,13 @@ public class Curso {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getFecha_inicio() {
@@ -43,43 +71,13 @@ public class Curso {
         this.fecha_fin = fecha_fin;
     }
 
-    public Long getPrograma_id() {
-        return programa_id;
+    public Programa getPrograma() {
+        return programa;
     }
 
-    public void setPrograma_id(Long programa_id) {
-        this.programa_id = programa_id;
+    public void setPrograma(Programa programa) {
+        this.programa = programa;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 
-    private Long id;
-    private String nombre;
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    private String descripcion;
-    private String fecha_inicio;
-    private String  fecha_fin;
-    private Long programa_id;
-
-    // Constructor por defecto
-    public Curso() {
-    }
-
-   public Curso(String nombre, String descripcion, String fecha_inicio, String fecha_fin, Long programa_id){
-       this.nombre = nombre;
-       this.descripcion = descripcion;
-       this.fecha_inicio=fecha_inicio;
-       this.fecha_fin = fecha_fin;
-       this.programa_id = programa_id;
-
-   }
 }
