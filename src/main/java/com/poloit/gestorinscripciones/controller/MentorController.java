@@ -1,38 +1,42 @@
 package com.poloit.gestorinscripciones.controller;
 
-import com.poloit.gestorinscripciones.model.Curso;
-import com.poloit.gestorinscripciones.service.CursoService;
+import com.poloit.gestorinscripciones.model.User;
+import com.poloit.gestorinscripciones.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
 @RequestMapping("/api/mentores")
 public class MentorController {
     @Autowired
-    MentorService mentorService;
+    UserService userService;
 
     @PostMapping()
-    public void crearMentor(@RequestBody Mentor mentor, @RequestParam Long cursoId){
-        mentorService.crearMentor(mentor, cursoId);
+    public void crearMentor(@RequestBody User user, @RequestParam Long rolId, @RequestParam Long empresaId){
+        userService.crearUser(user, rolId, empresaId);
     }
     @GetMapping()
-    public List<Mentor> mostrarTodos(){
-        return mentorService.mostrarTodos();
+    public List<User> mostrarMentores(){
+        return userService.mostrarTodos().stream()
+                .filter(user -> user.getRol().getNombre().equals("Mentor"))
+                .collect(Collectors.toList());
     }
     @GetMapping("/{id}")
-    public Optional<Mentor> mentorId(@PathVariable Long id){
-        return mentorService.mentorId(id);
+    public Optional<User> mentorId(@PathVariable Long id){
+        return userService.userId(id);
     }
     @DeleteMapping("/{id}")
     public void eliminarMentor(@PathVariable Long id){
-        mentorService.eliminarMentor(id);
+        userService.eliminarUser(id);
     }
     @PutMapping("/{id}")
-    public Mentor actualizarMentor(@PathVariable Long id, @RequestBody Mentor mentor){
-        return mentorService.actualizarMentor(id, mentor);
+    public User actualizarMentor(@PathVariable Long id, @RequestBody User user){
+        return userService.actualizarUser(id, user);
     }
 }
