@@ -23,6 +23,17 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "empresa_id", nullable = true)
     private Empresa empresa;
+    @ManyToOne
+    @JoinColumn(name = "equipo_id")
+    private Equipo equipo;
+
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
 
     // Constructor por defecto
     public User() {
