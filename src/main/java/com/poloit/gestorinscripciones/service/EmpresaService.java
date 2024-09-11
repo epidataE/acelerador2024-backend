@@ -2,6 +2,7 @@ package com.poloit.gestorinscripciones.service;
 
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.Empresa;
+import com.poloit.gestorinscripciones.model.TipoEntidad;
 import com.poloit.gestorinscripciones.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class EmpresaService {
             throw new ResourceNotFoundException("not found", "Empresa", "id", id);
         }
     }
+    public List<Empresa> obtenerEmpresasPorTipoEntidad(TipoEntidad tipoEntidad) {
+        return empresaRepository.findByTipoEntidad(tipoEntidad);
+    }
     public void eliminarEmpresa(Long id){
         if (empresaRepository.findById(id).isPresent()) {
             empresaRepository.deleteById(id);
@@ -42,6 +46,7 @@ public class EmpresaService {
             empresaModificado.setNombre(empresa.getNombre());
             empresaModificado.setDescripcion(empresa.getDescripcion());
             empresaModificado.setContacto(empresa.getContacto());
+            empresaModificado.setTipoEntidad(empresa.getTipoEntidad());
             return empresaRepository.save(empresaModificado);
 
         } else {

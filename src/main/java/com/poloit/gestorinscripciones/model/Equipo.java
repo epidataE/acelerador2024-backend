@@ -12,14 +12,11 @@ public class Equipo {
     private Long id;
     private String nombre;
     private String curso;
-
-    //Un equipo puede tener muchos usuarios
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL) //Define el comportamiento de cascada para las operaciones de persistencia.
-    // CascadeType.ALL significa que todos los cambios realizadas en la entidad "Team" se
-    // aplicarán también a las entidades "User" asociadas
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
-    // Getters y setters
 
+
+    // Getters y setters
 
     public Long getId() {
         return id;
@@ -33,7 +30,7 @@ public class Equipo {
         return nombre;
     }
 
-    public void setName(String name) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
@@ -44,7 +41,6 @@ public class Equipo {
     public void setCurso(String curso) {
         this.curso = curso;
     }
-
     public List<User> getUsers() {
         return users;
     }
@@ -52,4 +48,17 @@ public class Equipo {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    // Métodos de conveniencia para manejar la relación bidireccional
+    public void addUser(User user) {
+        users.add(user);
+        user.setEquipo(this);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.setEquipo(null);
+    }
+
+
 }

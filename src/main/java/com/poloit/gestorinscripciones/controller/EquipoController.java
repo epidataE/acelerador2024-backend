@@ -6,20 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/equipos")
 public class EquipoController {
     @Autowired
     EquipoService equipoService;
-    @PostMapping()
+
+    @PostMapping
     public Equipo crearEquipo(@RequestBody Equipo equipo) {
         return equipoService.crearEquipo(equipo);
     }
-    @PostMapping("/{equipoId}/usuarios")
-    public Equipo asignarUsuarios(@PathVariable Long equipoId, @RequestBody List<Long> userIds) {
-        return equipoService.asignarUsuarios(equipoId, userIds);
-    }
+
     @GetMapping
     public List<Equipo> listarEquipos() {
         return equipoService.listarEquipos();

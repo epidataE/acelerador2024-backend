@@ -12,9 +12,13 @@ public class User {
     private String email;
     private String contrasena;
     private String fecha_creacion;
-    @ManyToOne
-    @JoinColumn(name = "rol_id")
+
+    @Enumerated(EnumType.STRING) //EnumType.STRING almacena el nombre de enum como texto
     private Rol rol;
+
+    @Enumerated(EnumType.STRING)
+    private Especializacion especializacion;
+
     //en el caso de ser Estudiante --> relaciona con un Curso
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = true)
@@ -27,24 +31,21 @@ public class User {
     @JoinColumn(name = "equipo_id")
     private Equipo equipo;
 
-    public Equipo getEquipo() {
-        return equipo;
-    }
-
-    public void setEquipo(Equipo equipo) {
-        this.equipo = equipo;
-    }
 
     // Constructor por defecto
     public User() {
     }
 
-    public User(String apellido, String nombre, String email, String contrasena, String fecha_creacion) {
+    public User(String apellido, String nombre, String email, String contrasena, String fecha_creacion,
+                Rol rol, Especializacion especializacion, Empresa empresa) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.email = email;
         this.contrasena = contrasena;
         this.fecha_creacion = fecha_creacion;
+        this.rol = rol;
+        this.especializacion= especializacion;
+        this.empresa = empresa;
     }
     //Getters/Setters
 
@@ -104,6 +105,14 @@ public class User {
         this.rol = rol;
     }
 
+    public Especializacion getEspecializacion() {
+        return especializacion;
+    }
+
+    public void setEspecializacion(Especializacion especializacion) {
+        this.especializacion = especializacion;
+    }
+
     public Curso getCurso() {
         return curso;
     }
@@ -118,5 +127,12 @@ public class User {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
     }
 }

@@ -1,13 +1,9 @@
 package com.poloit.gestorinscripciones.service;
 
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
-import com.poloit.gestorinscripciones.model.Curso;
-import com.poloit.gestorinscripciones.model.Empresa;
-import com.poloit.gestorinscripciones.model.Rol;
-import com.poloit.gestorinscripciones.model.User;
+import com.poloit.gestorinscripciones.model.*;
 import com.poloit.gestorinscripciones.repository.CursoRepository;
 import com.poloit.gestorinscripciones.repository.EmpresaRepository;
-import com.poloit.gestorinscripciones.repository.RolRepository;
 import com.poloit.gestorinscripciones.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,37 +19,31 @@ public class UserService {
     CursoRepository cursoRepository;
 @Autowired
     EmpresaRepository empresaRepository;
-@Autowired
-    RolRepository rolRepository;
 
-    public void crearUser(User user, Long rolId, Long cursoId) throws ResourceNotFoundException {
 
-            Rol rol = rolRepository.findById(rolId).orElseThrow(()
-                    -> new ResourceNotFoundException("Rol inexistente", "rol", "id", rolId));
-            user.setRol(rol);
-            if ("Estudiante".equalsIgnoreCase(rol.getNombre())) {
-            Curso curso = cursoRepository.findById(cursoId).orElseThrow(() -> new ResourceNotFoundException("Curso inexistente", "Curso", "id", cursoId));
-            user.setCurso(curso);
-
-        } else if ("Mentor".equalsIgnoreCase(rol.getNombre())) {
-            Empresa empresa = empresaRepository.findById(cursoId).orElseThrow(() -> new ResourceNotFoundException("Empresa no encontrada", "EmpresaSocia", "id", cursoId));
-            user.setEmpresa(empresa);
-        } else {
-            throw new IllegalArgumentException("Rol no soportado: " + rol.getNombre());
-        }
-
+    public User crearUser(User user, Long empresaId)
+        throws ResourceNotFoundException {
+        Empresa empresa = empresaRepository.findById(empresaId).orElseThrow(() ->
+                new ResourceNotFoundException("Empresa no encontrada", "EmpresaSocia", "id", empresaId));
+        user.setEmpresa(empresa);
         userRepository.save(user);
+        return user;
 
     }
     public List<User> mostrarTodos() {
         return userRepository.findAll();
     }
+
     public Optional<User> userId(Long id) throws  ResourceNotFoundException{
         if (userRepository.findById(id).isPresent()){
             return userRepository.findById(id);
         } else {
             throw new ResourceNotFoundException("not found", "User", "id", id);
         }
+    }
+
+    public List<User> findByEspecializacion(Especializacion especializacion) {
+        return userRepository.findByEspecializacion(especializacion);
     }
 
     public void eliminarUser(Long id){
@@ -65,17 +55,17 @@ public class UserService {
     }
 
     public User actualizarUser(Long id, User user) throws ResourceNotFoundException {
-        Optional<User> userAModificar = userRepository.findById(id);
-        if (userAModificar.isPresent()) {
-            User userModificado = userAModificar.get();
-            userModificado.setApellido(user.getApellido());
-            userModificado.setNombre(user.getNombre());
-            userModificado.setEmail(user.getEmail());
-            userModificado.setContrasena(user.getContrasena());
-            return userRepository.save(userModificado);
+        User userModificado = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado", "User", "id", id));
 
-        } else {
-            throw new ResourceNotFoundException("not found", "User", "id", id);
-        }
+        userModificado.setApellido(user.getApellido());
+        userModificado.setNombre(user.getNombre());
+        userModificado.setEmail(user.getEmail());
+        userModificado.setContrasena(user.getContrasena());
+        userModificado.setRol(user.getRol());
+        userModificado.setEspecializacion(user.getEspecializacion());
+        userModificado.setEmpresa(user.getEmpresa());
+
+        return userRepository.save(userModificado);
     }
 }
