@@ -1,5 +1,6 @@
 package com.poloit.gestorinscripciones.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -29,6 +30,8 @@ public class User {
     private Empresa empresa;
     @ManyToOne
     @JoinColumn(name = "equipo_id")
+    @JsonBackReference //Esta anotación se coloca en el lado “hijo” de la relación.
+                       // Indica que esta parte de la relación no debe ser serializada, evitando así la recursión infinita.
     private Equipo equipo;
 
 
