@@ -2,6 +2,7 @@ package com.poloit.gestorinscripciones.service;
 
 import com.poloit.gestorinscripciones.model.Equipo;
 import com.poloit.gestorinscripciones.model.Especializacion;
+import com.poloit.gestorinscripciones.model.Rol;
 import com.poloit.gestorinscripciones.model.User;
 import com.poloit.gestorinscripciones.repository.EquipoRepository;
 import com.poloit.gestorinscripciones.repository.UserRepository;
@@ -24,9 +25,9 @@ public class AsignacionService {
         Equipo equipo = equipoRepository.findById(equipoId)
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
 
-        List<User> desarrolladores = userRepository.findByEspecializacion(Especializacion.DESARROLLADOR);
-        List<User> uxParticipantes = userRepository.findByEspecializacion(Especializacion.UX_UI);
-        List<User> qaParticipantes = userRepository.findByEspecializacion(Especializacion.QA);
+        List<User> desarrolladores = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE, Especializacion.DESARROLLADOR);
+        List<User> uxParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE,Especializacion.UX_UI);
+        List<User> qaParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE,Especializacion.QA);
        //agrega estudiantes desarrolladores
         int asignados = 0;
         for (User desarrollador : desarrolladores) {
