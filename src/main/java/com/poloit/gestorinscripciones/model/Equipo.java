@@ -1,5 +1,6 @@
 package com.poloit.gestorinscripciones.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,8 +13,11 @@ public class Equipo {
     private Long id;
     private String nombre;
     private String curso;
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "equipo")
+    @JsonManagedReference  //Esta anotación se coloca en el lado “padre” de la relación.
+                            // Indica que esta parte de la relación debe ser serializada.
+    private List<User> usuarios;
 
 
     // Getters y setters
@@ -41,24 +45,17 @@ public class Equipo {
     public void setCurso(String curso) {
         this.curso = curso;
     }
-    public List<User> getUsers() {
-        return users;
+
+
+
+    public List<User> getUsuarios() {
+        return usuarios;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUsuarios(List<User> usuarios) {
+        this.usuarios = usuarios;
     }
 
-    // Métodos de conveniencia para manejar la relación bidireccional
-    public void addUser(User user) {
-        users.add(user);
-        user.setEquipo(this);
-    }
-
-    public void removeUser(User user) {
-        users.remove(user);
-        user.setEquipo(null);
-    }
 
 
 }

@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findByRol(Rol rol);
+    List<User> findByRolAndEspecializacion(Rol rol, Especializacion especializacion);
     List<User> findByEspecializacion(Especializacion especializacion);
 }
