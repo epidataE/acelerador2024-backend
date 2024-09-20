@@ -26,9 +26,14 @@ public class AsignacionService {
                 .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
 
         List<User> desarrolladores = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE, Especializacion.DESARROLLADOR);
-        List<User> uxParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE,Especializacion.UX_UI);
-        List<User> qaParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE,Especializacion.QA);
-       //agrega estudiantes desarrolladores
+        List<User> uxParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE, Especializacion.UX_UI);
+        List<User> qaParticipantes = userRepository.findByRolAndEspecializacion(Rol.ESTUDIANTE, Especializacion.QA);
+        //mentores
+        List<User> mentoresDesarrolladores = userRepository.findByRolAndEspecializacion(Rol.MENTOR, Especializacion.DESARROLLADOR);
+        List<User> mentoresUx = userRepository.findByRolAndEspecializacion(Rol.MENTOR, Especializacion.UX_UI);
+        List<User> mentoresQa = userRepository.findByRolAndEspecializacion(Rol.MENTOR, Especializacion.QA);
+
+        //agrega estudiantes desarrolladores
         int asignados = 0;
         for (User desarrollador : desarrolladores) {
             if (asignados >= cantidadDesarrolladores) {
@@ -36,7 +41,7 @@ public class AsignacionService {
             }
             if (desarrollador.getEquipo() == null) { // Solo asignar participantes que no tienen equipo
                 desarrollador.setEquipo(equipo);
-               userRepository.save(desarrollador);
+                userRepository.save(desarrollador);
                 asignados++;
             }
         }
@@ -63,6 +68,25 @@ public class AsignacionService {
                 userRepository.save(qa);
                 asignados++;
             }
+        }
+
+        // Asigna un mentor de cada especialidad
+        if (!mentoresDesarrolladores.isEmpty()) {
+            User mentorDesarrollador = mentoresDesarrolladores.get(0);
+            mentorDesarrollador.setEquipo(equipo);
+            userRepository.save(mentorDesarrollador);
+        }
+
+        if (!mentoresUx.isEmpty()) {
+            User mentorUx = mentoresUx.get(0);
+            mentorUx.setEquipo(equipo);
+            userRepository.save(mentorUx);
+        }
+
+        if (!mentoresQa.isEmpty()) {
+            User mentorQa = mentoresQa.get(0);
+            mentorQa.setEquipo(equipo);
+            userRepository.save(mentorQa);
         }
     }
 }
