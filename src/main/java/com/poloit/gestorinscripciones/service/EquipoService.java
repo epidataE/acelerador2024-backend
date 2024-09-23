@@ -40,6 +40,13 @@ public class EquipoService {
             throw new ResourceNotFoundException("not found", "User", "id", id);
         }
     }
+    public void eliminarEquipo(Long id){
+        if (equipoRepository.findById(id).isPresent()) {
+           equipoRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("not found", "Equipo", "id", id);
+        }
+    }
 
 
 }

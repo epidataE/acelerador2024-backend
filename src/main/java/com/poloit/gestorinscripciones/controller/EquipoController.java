@@ -1,6 +1,7 @@
 package com.poloit.gestorinscripciones.controller;
 
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
+import com.poloit.gestorinscripciones.model.Empresa;
 import com.poloit.gestorinscripciones.model.Equipo;
 import com.poloit.gestorinscripciones.model.User;
 import com.poloit.gestorinscripciones.service.EquipoService;
@@ -37,4 +38,10 @@ public class EquipoController {
             return ResponseEntity.notFound().build();
         }
     }
+    @DeleteMapping("/{id}")
+    public void eliminarEquipo(@PathVariable Long id){
+        equipoService.eliminarEquipo(id);
+    }
+
+
 }
