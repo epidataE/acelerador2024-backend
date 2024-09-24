@@ -20,7 +20,7 @@ public class AsignacionController {
             @PathVariable int qaParticipantes
     ) {
         asignacionService.asignarParticipantesAEquipo(equipoId, desarrolladores, uxParticipantes, qaParticipantes);
-        return ResponseEntity.ok("Participantes asignados al equipo automáticamente.");
+        return ResponseEntity.ok("Participantes asignados al equipo automaticamente.");
     }
 
 
