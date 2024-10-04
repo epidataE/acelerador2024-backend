@@ -11,23 +11,20 @@ public class Curso {
     private Long id;
     private String nombre;
     private String descripcion;
-    private String fecha_inicio;
-    private String  fecha_fin;
-    //private Long programa_id;
-    @ManyToOne
-    @JoinColumn(name = "programa_id")
-    private Programa programa;
+    private String rubro;
+    @Column(nullable = true) // Indica que este campo puede ser nulo
+    private String institucion;
 
     // Constructor por defecto
     public Curso() {
     }
 
-   public Curso(String nombre, String descripcion, String fecha_inicio, String fecha_fin){
+   public Curso(String nombre, String descripcion, String rubro, String institucion){
        this.nombre = nombre;
        this.descripcion = descripcion;
-       this.fecha_inicio=fecha_inicio;
-       this.fecha_fin = fecha_fin;
-       //this.programa_id = programa_id;
+       this.rubro=rubro;
+       this.institucion = institucion;
+
 
    }
 
@@ -55,29 +52,19 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
-    public String getFecha_inicio() {
-        return fecha_inicio;
+    public String getRubro() {
+        return rubro;
     }
 
-    public void setFecha_inicio(String fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setRubro(String rubro) {
+        this.rubro = rubro;
     }
 
-    public String getFecha_fin() {
-        return fecha_fin;
+    public String getInstitucion() {
+        return institucion;
     }
 
-    public void setFecha_fin(String fecha_fin) {
-        this.fecha_fin = fecha_fin;
+    public void setInstitucion(String institucion) {
+        this.institucion = institucion;
     }
-
-    public Programa getPrograma() {
-        return programa;
-    }
-
-    public void setPrograma(Programa programa) {
-        this.programa = programa;
-    }
-
-
 }
