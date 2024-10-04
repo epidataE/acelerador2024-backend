@@ -1,7 +1,11 @@
 package com.poloit.gestorinscripciones.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -33,6 +37,17 @@ public class User {
     @JsonBackReference //Esta anotación se coloca en el lado “hijo” de la relación.
                        // Indica que esta parte de la relación no debe ser serializada, evitando así la recursión infinita.
     private Equipo equipo;
+    // Relación para mensajes enviados
+    @OneToMany(mappedBy = "remitente")
+    @JsonManagedReference // Esta anotación se coloca en el lado “padre” de la relación.
+    // Indica que esta parte de la relación debe ser serializada.
+    private Set<Mensaje> mensajesEnviados;
+
+    // Relación para mensajes recibidos
+    @OneToMany(mappedBy = "destinatario")
+    @JsonManagedReference // Esta anotación se coloca en el lado “padre” de la relación.
+    // Indica que esta parte de la relación debe ser serializada.
+    private Set<Mensaje> mensajesRecibidos;
 
 
     // Constructor por defecto
@@ -49,6 +64,9 @@ public class User {
         this.rol = rol;
         this.especializacion= especializacion;
         this.empresa = empresa;
+        // Inicializar las colecciones para evitar NullPointerException
+        this.mensajesEnviados = new HashSet<>();
+        this.mensajesRecibidos = new HashSet<>();
     }
     //Getters/Setters
 
@@ -138,4 +156,21 @@ public class User {
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
+
+    public Set<Mensaje> getMensajesEnviados() {
+        return mensajesEnviados;
+    }
+
+    public void setMensajesEnviados(Set<Mensaje> mensajesEnviados) {
+        this.mensajesEnviados = mensajesEnviados;
+    }
+
+    public Set<Mensaje> getMensajesRecibidos() {
+        return mensajesRecibidos;
+    }
+
+    public void setMensajesRecibidos(Set<Mensaje> mensajesRecibidos) {
+        this.mensajesRecibidos = mensajesRecibidos;
+    }
 }
+
