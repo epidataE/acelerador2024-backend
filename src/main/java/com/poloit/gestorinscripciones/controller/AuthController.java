@@ -22,8 +22,9 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             User user = authService.login(loginRequest.getEmail(), loginRequest.getContrasena());
-            return ResponseEntity.ok("LOGIN EXITOSO!!!   " + user.getApellido() + "  " + user.getNombre()+" | "
-                    + user.getRol()); // Devuelve el usuario
+            return ResponseEntity.ok(user);// Devuelve el usuario
+            //  return ResponseEntity.ok("LOGIN EXITOSO!!!   " + user.getApellido() + "  " + user.getNombre()+" | "
+            //        + user.getRol());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
