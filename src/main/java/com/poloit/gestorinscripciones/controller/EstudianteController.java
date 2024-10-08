@@ -4,6 +4,7 @@ import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.*;
 import com.poloit.gestorinscripciones.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,17 @@ public class EstudianteController {
     @Autowired
     UserService userService;
 
-   @PostMapping()
-   public void crearEstudiante(@RequestBody User user, @RequestParam  Long empresaId){
-       userService.crearUser(user, empresaId);
-   }
+    @PostMapping()
+    public ResponseEntity<User> crearEstudiante(@RequestBody User user, @RequestParam Long empresaId) {
+        try {
+            User nuevoUsuario = userService.crearUser(user, empresaId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
 
     @GetMapping()

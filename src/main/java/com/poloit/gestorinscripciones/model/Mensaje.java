@@ -1,11 +1,14 @@
 package com.poloit.gestorinscripciones.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "mensajes")
 public class Mensaje {
 
@@ -15,12 +18,12 @@ public class Mensaje {
 
     @ManyToOne
     @JoinColumn(name = "remitente_id")
-    @JsonBackReference
+    //@JsonBackReference
     private User remitente;
 
     @ManyToOne
     @JoinColumn(name = "destinatario_id")
-    @JsonBackReference
+    //@JsonBackReference
     private User destinatario;
 
     private String contenido;
