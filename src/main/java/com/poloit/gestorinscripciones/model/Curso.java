@@ -1,5 +1,8 @@
 package com.poloit.gestorinscripciones.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 
 @Entity
@@ -11,19 +14,21 @@ public class Curso {
     private Long id;
     private String nombre;
     private String descripcion;
-    private String rubro;
-    @Column(nullable = true) // Indica que este campo puede ser nulo
-    private String institucion;
+    private boolean estado;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@JsonManagedReference // Indica que esta es la parte que se serializa
+    private Set<User> usuarios;
+
 
     // Constructor por defecto
     public Curso() {
     }
 
-   public Curso(String nombre, String descripcion, String rubro, String institucion){
+   public Curso(String nombre, String descripcion, boolean estado){
        this.nombre = nombre;
        this.descripcion = descripcion;
-       this.rubro=rubro;
-       this.institucion = institucion;
+       this.estado = estado;
+
 
 
    }
@@ -52,19 +57,19 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
-    public String getRubro() {
-        return rubro;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setRubro(String rubro) {
-        this.rubro = rubro;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
-    public String getInstitucion() {
-        return institucion;
+    public Set<User> getUsuarios() {
+        return usuarios;
     }
 
-    public void setInstitucion(String institucion) {
-        this.institucion = institucion;
+    public void setUsuarios(Set<User> usuarios) {
+        this.usuarios = usuarios;
     }
 }

@@ -2,7 +2,6 @@ package com.poloit.gestorinscripciones.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -34,6 +33,7 @@ public class User {
     //en el caso de ser Estudiante --> relaciona con un Curso
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = true)
+   // @JsonBackReference // Indica que esta es la parte que no se serializa
     private Curso curso;
     //en caso de ser Mentor --> relaciona con Empresa Socia
     @ManyToOne

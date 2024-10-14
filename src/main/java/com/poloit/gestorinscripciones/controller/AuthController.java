@@ -1,5 +1,6 @@
 package com.poloit.gestorinscripciones.controller;
 
+import com.poloit.gestorinscripciones.model.Admin;
 import com.poloit.gestorinscripciones.model.LoginRequest;
 import com.poloit.gestorinscripciones.model.User;
 import com.poloit.gestorinscripciones.service.AuthService;
@@ -21,10 +22,20 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            User user = authService.login(loginRequest.getEmail(), loginRequest.getContrasena());
-            return ResponseEntity.ok(user);// Devuelve el usuario
-            //  return ResponseEntity.ok("LOGIN EXITOSO!!!   " + user.getApellido() + "  " + user.getNombre()+" | "
-            //        + user.getRol());
+            Object account = authService.login(loginRequest.getEmail(), loginRequest.getContrasena());
+
+            // Verificar si el objeto devuelto es un User o un Admin
+            if (account instanceof User) {
+                User user = (User) account;
+                return ResponseEntity.ok(user);// Devuelve el usuario
+            } else if (account instanceof Admin) {
+                Admin admin = (Admin) account;
+                return ResponseEntity.ok(admin);// Devuelve el administrador
+            }
+
+            // En caso de que no se reconozca el tipo
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
