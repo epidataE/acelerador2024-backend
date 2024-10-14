@@ -23,6 +23,9 @@ public class UserService {
 
     public User crearUser(User user, Long empresaId)
         throws ResourceNotFoundException {
+        if (user.getRol() == null) {
+            throw new IllegalArgumentException("El rol del usuario debe ser especificado");
+        }
         Empresa empresa = empresaRepository.findById(empresaId).orElseThrow(() ->
                 new ResourceNotFoundException("Empresa no encontrada", "EmpresaSocia", "id", empresaId));
         user.setEmpresa(empresa);

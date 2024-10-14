@@ -15,12 +15,15 @@ public class CursoService {
     CursoRepository cursoRepository;
 
 
-    public void crearCurso (Curso curso) throws ResourceNotFoundException {
-           cursoRepository.save(curso);
+    public Curso crearCurso (Curso curso) throws ResourceNotFoundException {
+           return cursoRepository.save(curso);
     }
     public List<Curso> mostrarTodos() {
         return cursoRepository.findAll();
 
+    }
+    public List<Curso> obtenerCursosActivos() {
+        return cursoRepository.findByEstado(true);
     }
 
     public Optional<Curso> cursoId(Long id){
@@ -37,8 +40,7 @@ public class CursoService {
             Curso cursoModificado = cursoAModificar.get();
             cursoModificado.setNombre(curso.getNombre());
             cursoModificado.setDescripcion(curso.getDescripcion());
-            cursoModificado.setRubro(curso.getRubro());
-            cursoModificado.setInstitucion(curso.getInstitucion());
+            cursoModificado.setEstado(curso.isEstado());
             return cursoRepository.save(cursoModificado);
 
         } else {
