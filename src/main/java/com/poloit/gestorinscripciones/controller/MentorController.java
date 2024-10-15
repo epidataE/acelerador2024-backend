@@ -3,6 +3,7 @@ package com.poloit.gestorinscripciones.controller;
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.Rol;
 import com.poloit.gestorinscripciones.model.User;
+import com.poloit.gestorinscripciones.model.UserDTO;
 import com.poloit.gestorinscripciones.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,9 @@ public class MentorController {
     }
 
     @GetMapping()
-    public List<User> mostrarMentores(){
-        return userService.mostrarTodos().stream()
-                .filter(user -> user.getRol() == Rol.MENTOR)
+    public List<UserDTO> obtenerUsuariosConCursos(Rol rol) {
+        return userService.obtenerUsuariosConCursos().stream()
+                .filter(user -> user.getRol() == Rol.MENTOR) // Filtrar por rol
                 .collect(Collectors.toList());
     }
     @GetMapping("/{id}")

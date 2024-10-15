@@ -2,6 +2,7 @@ package com.poloit.gestorinscripciones.controller;
 
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.*;
+import com.poloit.gestorinscripciones.repository.UserRepository;
 import com.poloit.gestorinscripciones.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class EstudianteController {
     @Autowired
     UserService userService;
 
+
     @PostMapping()
     public ResponseEntity<User> crearEstudiante(@RequestBody User user, @RequestParam Long empresaId) {
         try {
@@ -32,17 +34,19 @@ public class EstudianteController {
 
 
     @GetMapping()
-    public List<User> mostrarEstudiantes(){
-        return userService.mostrarTodos().stream()
-                .filter(user -> user.getRol() == Rol.ESTUDIANTE)
+    public List<UserDTO> obtenerUsuariosConCursos(Rol rol) {
+        return userService.obtenerUsuariosConCursos().stream()
+                .filter(user -> user.getRol() == Rol.ESTUDIANTE) // Filtrar por rol
                 .collect(Collectors.toList());
     }
+
     @GetMapping("/filtrar")
     public List<User> getEspecialidad(@RequestParam Especializacion especializacion) {
         return userService.findByEspecializacion(especializacion).stream()
                 .filter(user -> user.getRol() == Rol.ESTUDIANTE)
                 .collect(Collectors.toList());
     }
+//
 
 
     @GetMapping("/{id}")
