@@ -2,6 +2,7 @@ package com.poloit.gestorinscripciones.controller;
 
 import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.Curso;
+import com.poloit.gestorinscripciones.model.CursoDTO;
 import com.poloit.gestorinscripciones.model.User;
 import com.poloit.gestorinscripciones.service.CursoService;
 import com.poloit.gestorinscripciones.service.UserService;
@@ -25,6 +26,7 @@ public class CursoController {
         Curso nuevoCurso = cursoService.crearCurso(curso);
         return ResponseEntity.ok(nuevoCurso);
     }
+
     @PostMapping("/{cursoId}/inscripcion")
     public ResponseEntity<User> inscribirUsuario(@PathVariable Long cursoId, @RequestBody Long usuarioId) {
         Curso curso = cursoService.cursoId(cursoId)
@@ -33,6 +35,11 @@ public class CursoController {
         User usuario = userService.userId(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // Verificar si el usuario ya está inscrito en un curso
+        if (usuario.getCurso() != null && usuario.getCurso().isEstado()) {
+            throw new RuntimeException("El usuario ya está inscrito en un curso.");
+        }
+
         usuario.setCurso(curso);
         userService.actualizarUser(usuarioId, usuario);
 
@@ -40,8 +47,9 @@ public class CursoController {
     }
 
     @GetMapping()
-    public List<Curso> mostrarTodos(){
-        return cursoService.mostrarTodos();
+    public ResponseEntity<List<CursoDTO>> listarCursosConUsuarios() {
+        List<CursoDTO> cursos = cursoService.obtenerCursosConUsuarios();
+        return ResponseEntity.ok(cursos);
     }
 
     @GetMapping("/activos")

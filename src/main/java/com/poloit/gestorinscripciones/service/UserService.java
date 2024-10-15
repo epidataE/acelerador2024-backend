@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -47,6 +48,36 @@ public class UserService {
 
     public List<User> findByEspecializacion(Especializacion especializacion) {
         return userRepository.findByEspecializacion(especializacion);
+    }
+
+    public List<UserDTO> obtenerUsuariosConCursos() {
+        List<User> usuarios = userRepository.findAll();
+        return usuarios.stream().map(user -> {
+            UserDTO dto = new UserDTO();
+            dto.setId(user.getId());
+            dto.setApellido(user.getApellido());
+            dto.setNombre(user.getNombre());
+            dto.setEmail(user.getEmail());
+            dto.setRol(user.getRol());
+            dto.setEspecializacion(user.getEspecializacion());
+
+            // Agregar el nombre de la empresa socia o entidad educativa
+            if (user.getEmpresa() != null) {
+                dto.setEmpresaNombre(user.getEmpresa().getNombre());            }
+
+
+            if (user.getCurso() != null) {
+                CursoDTO cursoDto = new CursoDTO();
+                cursoDto.setId(user.getCurso().getId());
+                cursoDto.setNombre(user.getCurso().getNombre());
+                cursoDto.setDescripcion(user.getCurso().getDescripcion());
+                cursoDto.setEstado(user.getCurso().isEstado());
+
+                dto.setCurso(cursoDto);
+            }
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public void eliminarUser(Long id){

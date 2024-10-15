@@ -33,7 +33,7 @@ public class User {
     //en el caso de ser Estudiante --> relaciona con un Curso
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = true)
-   // @JsonBackReference // Indica que esta es la parte que no se serializa
+    //@JsonBackReference // Indica que esta es la parte que no se serializa
     private Curso curso;
     //en caso de ser Mentor --> relaciona con Empresa Socia
     @ManyToOne
