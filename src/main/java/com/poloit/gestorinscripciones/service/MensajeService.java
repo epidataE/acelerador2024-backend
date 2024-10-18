@@ -1,6 +1,7 @@
 package com.poloit.gestorinscripciones.service;
 
 import com.poloit.gestorinscripciones.model.Mensaje;
+import com.poloit.gestorinscripciones.model.MensajeDTO;
 import com.poloit.gestorinscripciones.model.User;
 import com.poloit.gestorinscripciones.repository.MensajeRepository;
 import com.poloit.gestorinscripciones.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MensajeService {
@@ -19,8 +21,7 @@ public class MensajeService {
     @Autowired
     private UserRepository userRepository;
 
-    // Método para enviar un mensaje
-    public Mensaje enviarMensaje(Long remitenteId, Long destinatarioId, String contenido) {
+    public MensajeDTO enviarMensaje(Long remitenteId, Long destinatarioId, String contenido) {
         User remitente = userRepository.findById(remitenteId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         User destinatario = userRepository.findById(destinatarioId)
@@ -32,17 +33,25 @@ public class MensajeService {
         mensaje.setContenido(contenido);
         mensaje.setFechaEnvio(LocalDateTime.now());
 
-        return mensajeRepository.save(mensaje);
+        Mensaje savedMensaje = mensajeRepository.save(mensaje);
+
+        return convertirAMensajeDTO(savedMensaje);
     }
 
     // Método para obtener mensajes recibidos por un usuario
-    public List<Mensaje> obtenerMensajesRecibidos(Long usuarioId) {
-        return mensajeRepository.findByDestinatario_Id(usuarioId);
+    public List<MensajeDTO> obtenerMensajesRecibidos(Long usuarioId) {
+        List<Mensaje> mensajes = mensajeRepository.findByDestinatario_Id(usuarioId);
+        return mensajes.stream()
+                .map(this::convertirAMensajeDTO)
+                .collect(Collectors.toList());
     }
 
     // Método para obtener mensajes enviados por un usuario
-    public List<Mensaje> obtenerMensajesEnviados(Long usuarioId) {
-        return mensajeRepository.findByRemitente_Id(usuarioId);
+    public List<MensajeDTO> obtenerMensajesEnviados(Long usuarioId) {
+        List<Mensaje> mensajes = mensajeRepository.findByRemitente_Id(usuarioId);
+        return mensajes.stream()
+                .map(this::convertirAMensajeDTO)
+                .collect(Collectors.toList());
     }
 
     // Método para eliminar un mensaje
@@ -52,4 +61,26 @@ public class MensajeService {
         }
         mensajeRepository.deleteById(mensajeId);
     }
+
+     //Método privado para convertir Mensaje a MensajeDTO
+     private MensajeDTO convertirAMensajeDTO(Mensaje mensaje) {
+         MensajeDTO dto = new MensajeDTO();
+         dto.setId(mensaje.getId());
+
+         // Concatenar nombre y apellido del remitente
+         dto.setRemitenteNombre(mensaje.getRemitente().getNombre() + " " + mensaje.getRemitente().getApellido());
+
+         dto.setRemitenteId(mensaje.getRemitente().getId());
+
+         // Concatenar nombre y apellido del destinatario
+         dto.setDestinatarioNombre(mensaje.getDestinatario().getNombre() + " " + mensaje.getDestinatario().getApellido());
+
+         dto.setDestinatarioId(mensaje.getDestinatario().getId());
+
+         dto.setContenido(mensaje.getContenido());
+         dto.setFechaEnvio(mensaje.getFechaEnvio());
+
+         return dto;
+     }
+
 }

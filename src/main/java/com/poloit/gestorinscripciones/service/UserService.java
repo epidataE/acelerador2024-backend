@@ -66,15 +66,8 @@ public class UserService {
                 dto.setEmpresaNombre(user.getEmpresa().getNombre());            }
 
 
-            if (user.getCurso() != null) {
-                CursoDTO cursoDto = new CursoDTO();
-                cursoDto.setId(user.getCurso().getId());
-                cursoDto.setNombre(user.getCurso().getNombre());
-                cursoDto.setDescripcion(user.getCurso().getDescripcion());
-                cursoDto.setEstado(user.getCurso().isEstado());
 
-                dto.setCurso(cursoDto);
-            }
+
 
             return dto;
         }).collect(Collectors.toList());
