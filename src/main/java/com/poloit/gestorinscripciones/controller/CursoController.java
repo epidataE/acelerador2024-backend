@@ -4,6 +4,7 @@ import com.poloit.gestorinscripciones.exceptions.ResourceNotFoundException;
 import com.poloit.gestorinscripciones.model.Curso;
 import com.poloit.gestorinscripciones.model.CursoDTO;
 import com.poloit.gestorinscripciones.model.User;
+import com.poloit.gestorinscripciones.repository.CursoRepository;
 import com.poloit.gestorinscripciones.service.CursoService;
 import com.poloit.gestorinscripciones.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cursos")
@@ -20,6 +22,8 @@ public class CursoController {
     CursoService cursoService;
     @Autowired
     UserService userService;
+    @Autowired
+    CursoRepository cursoRepository;
 
     @PostMapping
     public ResponseEntity<Curso> crearCurso(@RequestBody Curso curso) {
@@ -53,9 +57,15 @@ public class CursoController {
     }
 
     @GetMapping("/activos")
-    public ResponseEntity<List<Curso>> obtenerCursosActivos() {
-        List<Curso> cursosActivos = cursoService.obtenerCursosActivos(); // Método que debes implementar
-        return ResponseEntity.ok(cursosActivos);
+    public ResponseEntity<List<CursoDTO>> obtenerCursosActivos() {
+        List<Curso> cursosActivosEntidades = cursoRepository.findByEstado(true); // Obtener entidades activas
+
+        // Convertir a DTO
+        List<CursoDTO> cursosActivosDTO = cursosActivosEntidades.stream()
+                .map(curso -> new CursoDTO(curso.getId(), curso.getNombre(), curso.getDescripcion()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(cursosActivosDTO);
     }
 
     @GetMapping("/{id}")

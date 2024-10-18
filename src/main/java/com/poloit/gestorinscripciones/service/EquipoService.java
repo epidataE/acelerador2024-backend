@@ -48,7 +48,7 @@ public List<EquipoDTO> obtenerEquiposConUsuarios() {
         EquipoDTO dto = new EquipoDTO();
         dto.setId(equipo.getId());
         dto.setNombre(equipo.getNombre());
-        dto.setCurso(equipo.getCurso());
+        dto.setCurso(equipo.getCurso().getNombre());
         // Mapear usuarios a UserDTO
         List<UserDTO> usuariosDto = equipo.getUsuarios().stream().map(user -> {
             UserDTO userDto = new UserDTO();

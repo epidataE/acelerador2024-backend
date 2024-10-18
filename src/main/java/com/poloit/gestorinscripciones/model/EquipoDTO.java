@@ -5,11 +5,11 @@ import java.util.List;
 public class EquipoDTO {
     private Long id;
     private String nombre;
-    private Curso curso;
+    private String curso;
     private List<UserDTO> usuarios;
 
     // Constructor
-    public EquipoDTO(Long id, String nombre, Curso curso, List<UserDTO> usuarios) {
+    public EquipoDTO(Long id, String nombre, String curso, List<UserDTO> usuarios) {
         this.id = id;
         this.nombre = nombre;
         this.curso = curso;
@@ -37,11 +37,11 @@ public class EquipoDTO {
         this.nombre = nombre;
     }
 
-    public Curso getCurso() {
+    public String getCurso() {
         return curso;
     }
 
-    public void setCurso(Curso curso) {
+    public void setCurso(String curso) {
         this.curso = curso;
     }
 

@@ -9,6 +9,16 @@ public class CursoDTO {
     private boolean estado;
     private Set<UserDTO> usuarios;
 
+    public CursoDTO(Long id, String nombre, String descripcion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
+    public CursoDTO() {
+
+    }
+
     // Constructor, Getters y Setters
 
     public Long getId() {
