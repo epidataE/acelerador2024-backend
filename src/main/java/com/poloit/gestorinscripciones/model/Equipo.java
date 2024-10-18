@@ -12,8 +12,9 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String curso;
-
+    @ManyToOne // Cambiamos a ManyToOne si un equipo puede estar asociado a un solo curso
+    @JoinColumn(name = "curso_id") // Nombre de la columna en la tabla Equipo
+    private Curso curso; //
     @OneToMany(mappedBy = "equipo")
     @JsonManagedReference  //Esta anotación se coloca en el lado “padre” de la relación.
                             // Indica que esta parte de la relación debe ser serializada.
@@ -38,11 +39,11 @@ public class Equipo {
         this.nombre = nombre;
     }
 
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
 
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
 
